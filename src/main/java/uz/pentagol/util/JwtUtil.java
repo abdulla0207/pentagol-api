@@ -2,6 +2,7 @@ package uz.pentagol.util;
 
 import io.jsonwebtoken.*;
 import uz.pentagol.dto.JwtDTO;
+import uz.pentagol.enums.UserRoleEnum;
 
 import java.util.Date;
 
@@ -10,11 +11,12 @@ public class JwtUtil {
 
     // This static method accepts the admin id and username of the admin who wants to login to the website
     // and creates a Token by encoding this information
-    public static String encode(Integer adminId, String username){
+    public static String encode(Integer id, String username, UserRoleEnum roleEnum){
         JwtBuilder jwtBuilder = Jwts.builder();
         jwtBuilder.setIssuedAt(new Date());
         jwtBuilder.signWith(SignatureAlgorithm.HS256, secretKey);
-        jwtBuilder.claim("id", adminId);
+        jwtBuilder.claim("id", id);
+        jwtBuilder.claim("role", roleEnum);
         jwtBuilder.claim("username", username);
 
         int tokenLifetime = 1000 * 3600 * 24;

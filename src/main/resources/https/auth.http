@@ -1,0 +1,17 @@
+POST localhost:8080/auth/register
+Content-Type: application/json
+
+{
+    "username": "cricketUser",
+    "password": "qwerty123456",
+    "email": "cricket.user46@gmail.com"
+}
+
+###
+GET localhost:8080/auth/login
+Content-Type: application/json
+
+{
+    "username": "cricketUser",
+    "password": "qwerty123456",
+}

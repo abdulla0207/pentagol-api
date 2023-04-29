@@ -27,13 +27,14 @@ public class ClubController {
         return ResponseEntity.ok(dtos);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/admin/create")
     public ResponseEntity<?> createClub(@Valid @RequestBody ClubDTO clubDTO){
         String response = clubService.createClub(clubDTO);
 
         return ResponseEntity.ok(response);
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/admin/update/{id}")
     public ResponseEntity<?> updateClub(@Valid @RequestBody ClubDTO clubDTO, @PathVariable int id){
         int result = clubService.updateClub(clubDTO, id);
@@ -43,7 +44,7 @@ public class ClubController {
 
         return ResponseEntity.badRequest().build();
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/admin/delete/{id}")
     public ResponseEntity<?> deleteById(@PathVariable int id){
         boolean response = clubService.deleteById(id);
@@ -51,4 +52,10 @@ public class ClubController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/leagues/{leagueId}")
+    public ResponseEntity<?> getClubsByLeagueId(@PathVariable int leagueId){
+        List<ClubDTO> getClubsByLeagueId = clubService.getClubsByLeagueId(leagueId);
+
+        return ResponseEntity.ok(getClubsByLeagueId);
+    }
 }

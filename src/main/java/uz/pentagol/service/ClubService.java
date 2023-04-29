@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import uz.pentagol.dto.ClubDTO;
 import uz.pentagol.entity.ClubEntity;
 import uz.pentagol.exceptions.AppBadRequest;
+import uz.pentagol.exceptions.ItemNotFound;
 import uz.pentagol.repository.ClubRepository;
 
 import java.util.ArrayList;
@@ -81,5 +82,25 @@ public class ClubService {
 
         clubRepository.deleteById(id);
         return true;
+    }
+
+    public List<ClubDTO> getClubsByLeagueId(int leagueId){
+        List<ClubEntity> clubEntities = clubRepository.findClubEntitiesByLeagueId(leagueId);
+
+        if(clubEntities.isEmpty())
+            throw new ItemNotFound("Clubs with this league ID does not exist");
+
+        List<ClubDTO> response = new ArrayList<>();
+
+        clubEntities.forEach(clubEntity -> {
+            ClubDTO clubDTO = new ClubDTO();
+            clubDTO.setName(clubEntity.getName());
+            clubDTO.setImage(clubEntity.getImage());
+            clubDTO.setGamesPlayed(clubEntity.getGamesPlayed());
+            clubDTO.setPoint(clubEntity.getPoint());
+            response.add(clubDTO);
+        });
+
+        return response;
     }
 }

@@ -9,6 +9,7 @@ import uz.pentagol.enums.UserRoleEnum;
 import uz.pentagol.exceptions.AppBadRequest;
 import uz.pentagol.exceptions.ItemAlreadyExists;
 import uz.pentagol.repository.ProfileRepository;
+import uz.pentagol.util.JwtUtil;
 import uz.pentagol.util.MD5Util;
 
 import javax.swing.text.html.Option;
@@ -23,7 +24,10 @@ public class AuthService {
     }
     public String register(RegistrationDTO registrationDTO) {
         Optional<UserEntity> userByEmail = profileRepository.findByEmail(registrationDTO.getEmail());
+        Optional<UserEntity> userByUsername = profileRepository.findByUsername(registrationDTO.getUsername());
 
+        if(userByUsername.isPresent())
+            throw new ItemAlreadyExists("User with this username already exists");
         if(userByEmail.isPresent())
             throw new ItemAlreadyExists("User with this email already exists");
 
@@ -38,7 +42,7 @@ public class AuthService {
     }
 
     public AuthResponseDTO login(AuthLoginDTO authLoginDTO) {
-        Optional<UserEntity> userByEmailAndPassword = profileRepository.findByEmailAndPassword(authLoginDTO.getEmail(),
+        Optional<UserEntity> userByEmailAndPassword = profileRepository.findByUsernameAndPassword(authLoginDTO.getUsername(),
                 MD5Util.encode(authLoginDTO.getPassword()));
 
         if(userByEmailAndPassword.isEmpty())
@@ -50,7 +54,7 @@ public class AuthService {
 
     private AuthResponseDTO toResponseDTO(UserEntity userEntity) {
         AuthResponseDTO authResponseDTO = new AuthResponseDTO();
-        authResponseDTO.setEmail(userEntity.getEmail());
+        authResponseDTO.setToken(JwtUtil.encode(userEntity.getId(), userEntity.getUsername(), userEntity.getUserRoleEnum()));
         authResponseDTO.setUsername(userEntity.getUsername());
         authResponseDTO.setRoleEnum(userEntity.getUserRoleEnum());
 

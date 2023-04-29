@@ -18,7 +18,8 @@ public class SecurityConfig {
 
         httpSecurity.authorizeHttpRequests()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
-                .requestMatchers("/club/admin/**").hasRole("ADMIN");
+                .requestMatchers("/club/admin/**").hasRole("ADMIN")
+                .requestMatchers("/auth/**").permitAll();
 
         return httpSecurity.build();
     }

@@ -9,5 +9,5 @@ import uz.pentagol.enums.UserRoleEnum;
 public class AuthResponseDTO {
     private String username;
     private UserRoleEnum roleEnum;
-    private String email;
+    private String token;
 }

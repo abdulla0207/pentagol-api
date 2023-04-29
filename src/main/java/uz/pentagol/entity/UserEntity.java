@@ -6,7 +6,7 @@ import lombok.Setter;
 import uz.pentagol.enums.UserRoleEnum;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 @Getter
 @Setter
 public class UserEntity {
