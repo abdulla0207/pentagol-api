@@ -5,8 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.pentagol.dto.ClubDTO;
+import uz.pentagol.dto.JwtDTO;
 import uz.pentagol.dto.LeagueDTO;
 import uz.pentagol.service.LeagueService;
+import uz.pentagol.util.JwtUtil;
 
 import java.util.List;
 
@@ -20,23 +22,23 @@ public class LeagueController {
         this.leagueService = leagueService;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/admin/create")
-    public ResponseEntity<?> createLeague(@Valid @RequestBody LeagueDTO leagueDTO){
-        String response = leagueService.createLeague(leagueDTO);
+    public ResponseEntity<?> createLeague(@Valid @RequestBody LeagueDTO leagueDTO, @RequestHeader("Authorization") String headerToken){
+        JwtDTO jwtDTO = JwtUtil.decode(JwtUtil.getToken(headerToken));
+        String response = leagueService.createLeague(leagueDTO, jwtDTO);
 
         return ResponseEntity.ok(response);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/admin/list")
+
+    @GetMapping("/list")
     public ResponseEntity<?> getList(){
         List<LeagueDTO> leagueList = leagueService.getLeagueList();
 
         return ResponseEntity.ok(leagueList);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/admin/update/{id}")
     public ResponseEntity<?> updateLeague(@Valid @RequestBody LeagueDTO leagueDTO, @PathVariable int id){
         int response = leagueService.updateLeague(leagueDTO, id);
@@ -47,7 +49,7 @@ public class LeagueController {
         return ResponseEntity.badRequest().build();
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/admin/delete/{id}")
     public ResponseEntity<?> deleteLeague(@PathVariable int id){
         boolean response = leagueService.deleteById(id);

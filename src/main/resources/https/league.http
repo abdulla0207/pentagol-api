@@ -1,0 +1,7 @@
+POST localhost:8080/league/admin/create
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2ODI4Mzk5NTIsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJ1c2VybmFtZSI6ImNyaWNrZXRVc2VyIiwiZXhwIjoxNjgyOTI2MzUyLCJpc3MiOiJwZW50YUdvbCJ9.6OfKyxn1OvSQ4rvBE2VRP0mlWk6RCVgL1uVWa-GEgsU
+
+{
+  "name": "LIGA sgLIG"
+}

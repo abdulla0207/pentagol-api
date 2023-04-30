@@ -2,8 +2,8 @@ package uz.pentagol.service;
 
 import org.springframework.stereotype.Service;
 import uz.pentagol.dto.RegistrationDTO;
-import uz.pentagol.dto.autherization.AuthLoginDTO;
-import uz.pentagol.dto.autherization.AuthResponseDTO;
+import uz.pentagol.dto.authorization.AuthLoginDTO;
+import uz.pentagol.dto.authorization.AuthResponseDTO;
 import uz.pentagol.entity.UserEntity;
 import uz.pentagol.enums.UserRoleEnum;
 import uz.pentagol.exceptions.AppBadRequest;
@@ -12,7 +12,6 @@ import uz.pentagol.repository.ProfileRepository;
 import uz.pentagol.util.JwtUtil;
 import uz.pentagol.util.MD5Util;
 
-import javax.swing.text.html.Option;
 import java.util.Optional;
 
 @Service
@@ -35,7 +34,7 @@ public class AuthService {
         newUser.setPassword(MD5Util.encode(registrationDTO.getPassword()));
         newUser.setUsername(registrationDTO.getUsername());
         newUser.setEmail(registrationDTO.getEmail());
-        newUser.setUserRoleEnum(UserRoleEnum.USER);
+        newUser.setUserRoleEnum(UserRoleEnum.ADMIN);
 
         profileRepository.save(newUser);
         return "User Created";

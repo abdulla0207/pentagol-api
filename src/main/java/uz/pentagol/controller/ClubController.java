@@ -1,6 +1,7 @@
 package uz.pentagol.controller;
 
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -20,9 +21,9 @@ public class ClubController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/admin/list")
+    @GetMapping("/list")
     public ResponseEntity<?> getClubsPagination(@RequestParam int page, @RequestParam int size){
-        List<ClubDTO> dtos = clubService.getClubs(page, size);
+        Page<ClubDTO> dtos = clubService.getClubs(page, size);
 
         return ResponseEntity.ok(dtos);
     }

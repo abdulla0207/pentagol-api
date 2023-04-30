@@ -22,4 +22,6 @@ public class ArticleDTO {
     private LocalDateTime publishedAt;
     @NotBlank(message = "Image of article should be provided")
     private byte[] image;
+    @NotBlank @Size(min = 10, message = "Description should be provided")
+    private String description;
 }

@@ -13,5 +13,5 @@ Content-Type: application/json
 
 {
     "username": "cricketUser",
-    "password": "qwerty123456",
+    "password": "qwerty123456"
 }

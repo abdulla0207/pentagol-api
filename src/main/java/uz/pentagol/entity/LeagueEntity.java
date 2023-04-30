@@ -14,7 +14,7 @@ public class LeagueEntity {
     private int id;
     @Column
     private String name;
-    @Lob
-    @Column
-    private byte[] image;
+//    @Lob
+//    @Column
+//    private byte[] image;
 }

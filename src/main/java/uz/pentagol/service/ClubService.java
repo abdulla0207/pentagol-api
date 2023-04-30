@@ -1,6 +1,7 @@
 package uz.pentagol.service;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,12 +23,14 @@ public class ClubService {
     public ClubService(ClubRepository clubRepository){
         this.clubRepository = clubRepository;
     }
-    public List<ClubDTO> getClubs(int page, int size) {
+    public Page<ClubDTO> getClubs(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<ClubEntity> clubEntityPage = clubRepository.findAll(pageable);
 
         List<ClubEntity> clubEntities = clubEntityPage.stream().toList();
-        return toDtoList(clubEntities);
+        List<ClubDTO> dtos = toDtoList(clubEntities);
+
+        return new PageImpl<>(dtos, pageable, clubEntityPage.getTotalElements());
     }
 
     private List<ClubDTO> toDtoList(List<ClubEntity> entities) {

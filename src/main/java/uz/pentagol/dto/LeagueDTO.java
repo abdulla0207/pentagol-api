@@ -13,6 +13,6 @@ public class LeagueDTO {
     private int id;
     @NotBlank @Size(min = 5, message = "League name is required")
     private String name;
-    @NotBlank(message = "Image of league is required")
-    private byte[] image;
+    //@NotBlank(message = "Image of league is required")
+    //private byte[] image;
 }

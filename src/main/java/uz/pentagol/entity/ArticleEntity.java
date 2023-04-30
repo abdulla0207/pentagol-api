@@ -19,6 +19,8 @@ public class ArticleEntity {
     private String title;
     @Column
     private String body;
+    @Column
+    private String description;
     @Column(name = "published_at")
     private LocalDateTime publishedAt;
     @Lob

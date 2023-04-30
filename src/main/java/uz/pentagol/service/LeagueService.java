@@ -1,9 +1,12 @@
 package uz.pentagol.service;
 
 import org.springframework.stereotype.Service;
+import uz.pentagol.dto.JwtDTO;
 import uz.pentagol.dto.LeagueDTO;
 import uz.pentagol.entity.LeagueEntity;
+import uz.pentagol.enums.UserRoleEnum;
 import uz.pentagol.exceptions.AppBadRequest;
+import uz.pentagol.exceptions.AppForbiddenException;
 import uz.pentagol.repository.LeagueRepository;
 
 import java.util.ArrayList;
@@ -18,7 +21,11 @@ public class LeagueService {
     public LeagueService(LeagueRepository leagueRepository){
         this.leagueRepository = leagueRepository;
     }
-    public String createLeague(LeagueDTO leagueDTO) {
+    public String createLeague(LeagueDTO leagueDTO, JwtDTO jwtDTO) {
+        if (!jwtDTO.getRoleEnum().equals(UserRoleEnum.ADMIN))
+            throw new AppForbiddenException("Method not Allowed");
+
+
         Optional<LeagueEntity> findByName = leagueRepository.findByName(leagueDTO.getName());
 
         if(findByName.isPresent())
@@ -26,7 +33,7 @@ public class LeagueService {
 
         LeagueEntity entity = new LeagueEntity();
         entity.setName(leagueDTO.getName());
-        entity.setImage(leagueDTO.getImage());
+        //entity.setImage(leagueDTO.getImage());
 
         leagueRepository.save(entity);
         return "League saved";
@@ -40,7 +47,7 @@ public class LeagueService {
         entities.forEach(leagueEntity -> {
             LeagueDTO temp = new LeagueDTO();
 
-            temp.setImage(leagueEntity.getImage());
+            //temp.setImage(leagueEntity.getImage());
             temp.setName(leagueEntity.getName());
             response.add(temp);
         });
@@ -49,7 +56,7 @@ public class LeagueService {
     }
 
     public int updateLeague(LeagueDTO leagueDTO, int id) {
-        int res = leagueRepository.updateLeague(leagueDTO.getName(), leagueDTO.getImage(), id);
+        int res = leagueRepository.updateLeague(leagueDTO.getName(), id);
 
         return res;
     }

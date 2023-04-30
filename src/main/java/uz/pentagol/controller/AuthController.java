@@ -1,19 +1,18 @@
 package uz.pentagol.controller;
 
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.pentagol.dto.RegistrationDTO;
-import uz.pentagol.dto.autherization.AuthLoginDTO;
-import uz.pentagol.dto.autherization.AuthResponseDTO;
+import uz.pentagol.dto.authorization.AuthLoginDTO;
+import uz.pentagol.dto.authorization.AuthResponseDTO;
 import uz.pentagol.service.AuthService;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
-    private AuthService authService;
+    private final AuthService authService;
 
     public AuthController(AuthService authService){
         this.authService = authService;

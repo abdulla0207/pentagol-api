@@ -33,4 +33,10 @@ public class MatchEntity {
     @Column(name = "match_date")
     private LocalDateTime matchDate;
 
+    @Column(name = "league_id")
+    private int leagueId;
+    @ManyToOne
+    @JoinColumn(name = "league_id", insertable = false, updatable = false)
+    private LeagueEntity league;
+
 }

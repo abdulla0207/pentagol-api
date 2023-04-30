@@ -15,6 +15,6 @@ public interface LeagueRepository extends JpaRepository<LeagueEntity, Integer> {
 
     @Modifying
     @Transactional
-    @Query("update LeagueEntity as l set l.name = ?1, l.image = ?2 where l.id = ?3")
-    int updateLeague(String name, byte[] image, int id);
+    @Query("update LeagueEntity as l set l.name = ?1 where l.id = ?2")
+    int updateLeague(String name, int id);
 }
