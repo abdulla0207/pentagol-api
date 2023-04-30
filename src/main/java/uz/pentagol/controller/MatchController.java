@@ -44,8 +44,6 @@ public class MatchController {
         return ResponseEntity.ok(res);
     }
 
-    @PutMapping("/update/{id}")
-
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteMatch(@PathVariable int id){

@@ -1,9 +1,6 @@
 package uz.pentagol.service;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import uz.pentagol.dto.ArticleDTO;
 import uz.pentagol.dto.JwtDTO;
@@ -28,7 +25,7 @@ public class ArticleService {
     }
 
     public Page<ArticleDTO> getArticlesPagination(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by("publishedAt").descending());
 
         Page<ArticleEntity> articleEntities = articleRepository.findAll(pageable);
 
@@ -74,7 +71,7 @@ public class ArticleService {
         dto.setDescription(entity.getDescription());
         dto.setTitle(entity.getTitle());
         dto.setBody(entity.getBody());
-        dto.setPublishedAt(entity.getPublishedAt());
+        dto.setPublishedAt(entity.getPublishedAt().toString());
 
         return dto;
     }
@@ -95,9 +92,9 @@ public class ArticleService {
             ArticleDTO articleDTO = new ArticleDTO();
             articleDTO.setTitle(e.getTitle());
             articleDTO.setBody(e.getBody());
-            articleDTO.setPublishedAt(e.getPublishedAt());
+            articleDTO.setPublishedAt(e.getPublishedAt().toString());
             articleDTO.setDescription(e.getDescription());
-
+            articleDTO.setId(e.getId());
             articleDTOS.add(articleDTO);
         });
 

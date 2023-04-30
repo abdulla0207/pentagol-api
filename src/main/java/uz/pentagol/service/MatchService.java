@@ -1,5 +1,6 @@
 package uz.pentagol.service;
 
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import uz.pentagol.dto.JwtDTO;
 import uz.pentagol.dto.MatchDTO;
@@ -84,7 +85,8 @@ public class MatchService {
         entity.setLeagueId(matchDTO.getLeagueId());
         entity.setClubAScore(matchDTO.getClubAScore());
         entity.setClubBScore(matchDTO.getClubBScore());
-        entity.setMatchDate(matchDTO.getMatchDate());
+        LocalDateTime time = LocalDateTime.parse(matchDTO.getMatchDate());
+        entity.setMatchDate(time);
 
         return entity;
     }
@@ -97,5 +99,11 @@ public class MatchService {
 
         matchRepository.delete(byId.get());
         return true;
+    }
+
+    public List<MatchEntity> getPrevGames(LocalDateTime now) {
+        List<MatchEntity> prevMatches = matchRepository.getPrevMatches(now);
+
+        return prevMatches;
     }
 }

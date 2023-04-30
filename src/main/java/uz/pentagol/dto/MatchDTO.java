@@ -16,5 +16,5 @@ public class MatchDTO {
     private int clubAScore;
     private int clubBScore;
     private int leagueId;
-    private LocalDateTime matchDate;
+    private String matchDate;
 }

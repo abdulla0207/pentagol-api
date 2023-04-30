@@ -15,6 +15,6 @@ public class ArticleDTO {
     private int id;
     private String title;
     private String body;
-    private LocalDateTime publishedAt;
+    private String publishedAt;
     private String description;
 }

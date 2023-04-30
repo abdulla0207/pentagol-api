@@ -23,4 +23,9 @@ public interface ClubRepository extends JpaRepository<ClubEntity, Integer> {
 
     @Query("select c from ClubEntity as c where c.leagueId=?1 order by c.gamesPlayed desc, c.point desc")
     List<ClubEntity> findClubEntitiesByLeagueId(int id);
+
+    @Modifying
+    @Transactional
+    @Query("update ClubEntity as c set c.point=?1 where c.id=?1")
+    int updateStat(int point, int id);
 }

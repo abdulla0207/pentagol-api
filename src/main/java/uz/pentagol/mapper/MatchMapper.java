@@ -12,7 +12,7 @@ public class MatchMapper {
     public static MatchResponseDTO toDTO(MatchEntity entity){
         MatchResponseDTO responseDTO = new MatchResponseDTO();
         responseDTO.setId(entity.getId());
-        responseDTO.setMatchDate(entity.getMatchDate());
+        responseDTO.setMatchDate(entity.getMatchDate().toString());
         responseDTO.setClubBScore(entity.getClubBScore());
         responseDTO.setClubAScore(entity.getClubAScore());
         responseDTO.setClubBName(entity.getClubB().getName());

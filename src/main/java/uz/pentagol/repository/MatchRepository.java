@@ -22,4 +22,7 @@ public interface MatchRepository extends JpaRepository<MatchEntity, Integer> {
             " left join ClubEntity as c2 on m.clubBId = c2.id" +
             " where m.matchDate between ?1 and ?2 and m.leagueId = ?3")
     List<MatchEntity> getNextWeekMatches(LocalDateTime firstDateOfCurrentWeek, LocalDateTime lastDateOfCurrentWeek, int leagueId);
+
+    @Query("select m from MatchEntity as m where m.matchDate < ?1")
+    List<MatchEntity> getPrevMatches(LocalDateTime currentDate);
 }

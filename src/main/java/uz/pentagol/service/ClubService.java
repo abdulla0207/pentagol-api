@@ -1,21 +1,17 @@
 package uz.pentagol.service;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import uz.pentagol.dto.ClubDTO;
-import uz.pentagol.dto.JwtDTO;
-import uz.pentagol.dto.LeagueDTO;
+import uz.pentagol.dto.*;
 import uz.pentagol.entity.ClubEntity;
 import uz.pentagol.entity.LeagueEntity;
+import uz.pentagol.entity.MatchEntity;
 import uz.pentagol.enums.UserRoleEnum;
 import uz.pentagol.exceptions.AppBadRequest;
 import uz.pentagol.exceptions.AppForbiddenException;
-import uz.pentagol.exceptions.ItemNotFound;
+import uz.pentagol.mapper.MatchResultMapper;
 import uz.pentagol.repository.ClubRepository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,8 +21,14 @@ public class ClubService {
 
     private final ClubRepository clubRepository;
 
-    public ClubService(ClubRepository clubRepository){
+    private final MatchService matchService;
+
+    private final LeagueService leagueService;
+
+    public ClubService(ClubRepository clubRepository, MatchService matchService, LeagueService leagueService){
         this.clubRepository = clubRepository;
+        this.matchService = matchService;
+        this.leagueService = leagueService;
     }
     public List<ClubDTO> getClubs() {
         List<ClubEntity> clubEntityPage = clubRepository.findAll();
@@ -71,6 +73,11 @@ public class ClubService {
 
         ClubEntity save = clubRepository.save(toEntity(clubDTO));
         clubDTO.setId(save.getId());
+        clubDTO.setLeagueId(save.getLeagueId());
+        LeagueDTO dto = new LeagueDTO();
+        dto.setName(save.getLeague().getName());
+        dto.setId(save.getLeague().getId());
+        clubDTO.setLeague(dto);
         return clubDTO;
     }
 
@@ -108,7 +115,7 @@ public class ClubService {
         List<ClubEntity> clubEntities = clubRepository.findClubEntitiesByLeagueId(leagueId);
 
         if(clubEntities.isEmpty())
-            throw new ItemNotFound("Clubs with this league ID does not exist");
+            return new ArrayList<>();
 
         List<ClubDTO> response = new ArrayList<>();
 
@@ -124,5 +131,34 @@ public class ClubService {
             response.add(clubDTO);
         });
         return response;
+    }
+
+    public String updateStat() {
+        List<MatchEntity> entities = matchService.getPrevGames(LocalDateTime.now());
+        List<MatchResultDTO> resultGames = MatchResultMapper.toDtoList(entities);
+
+
+        resultGames.forEach(game->{
+            Optional<ClubEntity> getClub1 = clubRepository.findById(game.getClubAId());
+            Optional<ClubEntity> getClub2 = clubRepository.findById(game.getClubBId());
+            ClubEntity clubEntity2 = getClub2.get();
+            ClubEntity clubEntity1 = getClub1.get();
+
+            if(game.getClubAScore()==game.getClubBScore()){
+                int first = clubEntity2.getPoint()+1;
+                int second = clubEntity1.getPoint()+1;
+                clubRepository.updateStat(first, clubEntity1.getId());
+                clubRepository.updateStat(second, clubEntity2.getId());
+            }else if(game.getClubBScore() > game.getClubAScore()){
+                int winner = clubEntity2.getPoint()+3;
+                clubRepository.updateStat(winner, clubEntity2.getId());
+            }else{
+                int winner = clubEntity1.getPoint()+3;
+                clubRepository.updateStat(winner, clubEntity1.getId());
+            }
+        });
+
+
+        return "Clubs Stat updated";
     }
 }
