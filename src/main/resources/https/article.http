@@ -1,0 +1,9 @@
+POST localhost:8080/article/create
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2ODI4NDg1NzYsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJ1c2VybmFtZSI6ImNyaWNrZXRVc2VyIiwiZXhwIjoxNjgyOTM0OTc3LCJpc3MiOiJwZW50YUdvbCJ9.lB3_q9f3ZzJoWJWaOFQxHN7sV0LUpz8x_EZsx5tFK8E
+
+{
+  "body": "asdaasdda",
+  "title": "asdadasadadasd",
+  "description": "asaqewreferf"
+}

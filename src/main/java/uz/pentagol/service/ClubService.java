@@ -6,8 +6,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import uz.pentagol.dto.ClubDTO;
+import uz.pentagol.dto.JwtDTO;
+import uz.pentagol.dto.LeagueDTO;
 import uz.pentagol.entity.ClubEntity;
+import uz.pentagol.entity.LeagueEntity;
+import uz.pentagol.enums.UserRoleEnum;
 import uz.pentagol.exceptions.AppBadRequest;
+import uz.pentagol.exceptions.AppForbiddenException;
 import uz.pentagol.exceptions.ItemNotFound;
 import uz.pentagol.repository.ClubRepository;
 
@@ -23,14 +28,11 @@ public class ClubService {
     public ClubService(ClubRepository clubRepository){
         this.clubRepository = clubRepository;
     }
-    public Page<ClubDTO> getClubs(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<ClubEntity> clubEntityPage = clubRepository.findAll(pageable);
+    public List<ClubDTO> getClubs() {
+        List<ClubEntity> clubEntityPage = clubRepository.findAll();
+        List<ClubDTO> dtos = toDtoList(clubEntityPage);
 
-        List<ClubEntity> clubEntities = clubEntityPage.stream().toList();
-        List<ClubDTO> dtos = toDtoList(clubEntities);
-
-        return new PageImpl<>(dtos, pageable, clubEntityPage.getTotalElements());
+        return dtos;
     }
 
     private List<ClubDTO> toDtoList(List<ClubEntity> entities) {
@@ -38,10 +40,12 @@ public class ClubService {
 
         entities.forEach(entity ->{
             ClubDTO clubDTO = new ClubDTO();
+            clubDTO.setId(entity.getId());
             clubDTO.setName(entity.getName());
             clubDTO.setPoint(entity.getPoint());
             clubDTO.setGamesPlayed(entity.getGamesPlayed());
             clubDTO.setImage(entity.getImage());
+            clubDTO.setLeague(toLeagueDto(entity.getLeague()));
 
             clubDTOS.add(clubDTO);
         });
@@ -49,14 +53,25 @@ public class ClubService {
         return clubDTOS;
     }
 
-    public String createClub(ClubDTO clubDTO) {
+    private LeagueDTO toLeagueDto(LeagueEntity entity){
+        LeagueDTO leagueDTO = new LeagueDTO();
+        leagueDTO.setName(entity.getName());
+        leagueDTO.setId(entity.getId());
+        return leagueDTO;
+    }
+
+    public ClubDTO createClub(ClubDTO clubDTO, JwtDTO jwtDTO) {
+        if (!jwtDTO.getRoleEnum().equals(UserRoleEnum.ADMIN))
+            throw new AppForbiddenException("Method not Allowed");
+
         Optional<ClubEntity> findByName = clubRepository.findByName(clubDTO.getName());
 
         if(findByName.isPresent())
             throw new AppBadRequest("This club already exists");
 
-        clubRepository.save(toEntity(clubDTO));
-        return "Club created";
+        ClubEntity save = clubRepository.save(toEntity(clubDTO));
+        clubDTO.setId(save.getId());
+        return clubDTO;
     }
 
 
@@ -71,14 +86,16 @@ public class ClubService {
         return clubEntity;
     }
 
-    public int updateClub(ClubDTO clubDTO, int id) {
+    public int updateClub(ClubDTO clubDTO, int id, JwtDTO jwtDTO) {
+        if (!jwtDTO.getRoleEnum().equals(UserRoleEnum.ADMIN))
+            throw new AppForbiddenException("Method not Allowed");
         int result = clubRepository.updateClub(clubDTO.getName(), clubDTO.getPoint(), clubDTO.getLeagueId(), clubDTO.getImage(),
                 clubDTO.getGamesPlayed(), id);
 
         return result;
     }
 
-    public Boolean deleteById(int id){
+    public Boolean deleteById(int id, JwtDTO jwtDTO){
         Optional<ClubEntity> byId = clubRepository.findById(id);
         if(byId.isEmpty())
             return false;
@@ -96,14 +113,16 @@ public class ClubService {
         List<ClubDTO> response = new ArrayList<>();
 
         clubEntities.forEach(clubEntity -> {
+            System.out.println(clubEntity.getLeagueId());
             ClubDTO clubDTO = new ClubDTO();
             clubDTO.setName(clubEntity.getName());
             clubDTO.setImage(clubEntity.getImage());
             clubDTO.setGamesPlayed(clubEntity.getGamesPlayed());
             clubDTO.setPoint(clubEntity.getPoint());
+            clubDTO.setLeagueId(clubEntity.getLeagueId());
+            clubDTO.setId(clubEntity.getId());
             response.add(clubDTO);
         });
-
         return response;
     }
 }

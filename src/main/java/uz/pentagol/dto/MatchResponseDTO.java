@@ -1,6 +1,5 @@
 package uz.pentagol.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,11 +7,10 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class MatchDTO {
+public class MatchResponseDTO {
     private int id;
-    private int clubAId;
-    private int clubBId;
+    private String clubAName;
+    private String clubBName;
     private int clubAScore;
     private int clubBScore;
     private int leagueId;

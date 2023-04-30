@@ -39,7 +39,7 @@ public class JwtUtil {
 
             Integer id = (Integer) body.get("id");
             String username = (String) body.get("username");
-            UserRoleEnum roleEnum = (UserRoleEnum) body.get("roleEnum");
+            UserRoleEnum roleEnum = UserRoleEnum.valueOf((String) body.get("role"));
 
             return new JwtDTO(id, username, roleEnum);
         }catch (JwtException e){

@@ -1,17 +1,18 @@
 package uz.pentagol.controller;
 
-import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.pentagol.dto.ClubDTO;
+import uz.pentagol.dto.JwtDTO;
 import uz.pentagol.service.ClubService;
+import uz.pentagol.util.JwtUtil;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/club")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ClubController {
 
     private final ClubService clubService;
@@ -20,35 +21,34 @@ public class ClubController {
         this.clubService = clubService;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/list")
-    public ResponseEntity<?> getClubsPagination(@RequestParam int page, @RequestParam int size){
-        Page<ClubDTO> dtos = clubService.getClubs(page, size);
+    public ResponseEntity<?> getClubsPagination(){
+        List<ClubDTO> dtos = clubService.getClubs();
 
         return ResponseEntity.ok(dtos);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/admin/create")
-    public ResponseEntity<?> createClub(@Valid @RequestBody ClubDTO clubDTO){
-        String response = clubService.createClub(clubDTO);
+    public ResponseEntity<?> createClub( @RequestBody ClubDTO clubDTO, @RequestHeader("Authorization") String headerToken){
+        JwtDTO jwtDTO = JwtUtil.decode(JwtUtil.getToken(headerToken));
+        ClubDTO response = clubService.createClub(clubDTO, jwtDTO);
 
         return ResponseEntity.ok(response);
     }
-    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/admin/update/{id}")
-    public ResponseEntity<?> updateClub(@Valid @RequestBody ClubDTO clubDTO, @PathVariable int id){
-        int result = clubService.updateClub(clubDTO, id);
+    public ResponseEntity<?> updateClub(@RequestBody ClubDTO clubDTO, @PathVariable int id, @RequestHeader("Authorization") String headerToken){
+        JwtDTO jwtDTO = JwtUtil.decode(JwtUtil.getToken(headerToken));
+        int result = clubService.updateClub(clubDTO, id, jwtDTO);
 
         if(result == 1)
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(clubDTO);
 
         return ResponseEntity.badRequest().build();
     }
-    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/admin/delete/{id}")
-    public ResponseEntity<?> deleteById(@PathVariable int id){
-        boolean response = clubService.deleteById(id);
+    public ResponseEntity<?> deleteById(@PathVariable int id, @RequestHeader("Authorization") String headerToken){
+        JwtDTO jwtDTO = JwtUtil.decode(JwtUtil.getToken(headerToken));
+        boolean response = clubService.deleteById(id, jwtDTO);
 
         return ResponseEntity.ok(response);
     }

@@ -7,12 +7,12 @@ import uz.pentagol.enums.UserRoleEnum;
 @Getter
 @Setter
 public class JwtDTO {
-    private int adminId;
+    private int id;
     private String username;
     private UserRoleEnum roleEnum;
 
     public JwtDTO(int adminId, String username, UserRoleEnum roleEnum) {
-        this.adminId = adminId;
+        this.id = adminId;
         this.username = username;
         this.roleEnum = roleEnum;
     }

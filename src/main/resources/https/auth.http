@@ -2,16 +2,19 @@ POST localhost:8080/auth/register
 Content-Type: application/json
 
 {
-    "username": "cricketUser",
-    "password": "qwerty123456",
-    "email": "cricket.user46@gmail.com"
+    "username": "newUser",
+    "password": "qwerty1234567",
+    "email": "new.user46@gmail.com"
 }
 
 ###
-GET localhost:8080/auth/login
+POST localhost:8080/auth/login
 Content-Type: application/json
 
 {
-    "username": "cricketUser",
+    "username": "cricketUserasd",
     "password": "qwerty123456"
 }
+
+###
+GET localhost:8080/match/current/1

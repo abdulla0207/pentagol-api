@@ -1,6 +1,5 @@
 package uz.pentagol.controller;
 
-import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.pentagol.dto.RegistrationDTO;
@@ -10,6 +9,7 @@ import uz.pentagol.service.AuthService;
 
 @RestController
 @RequestMapping("/auth")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class AuthController {
 
     private final AuthService authService;
@@ -19,14 +19,14 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody RegistrationDTO registrationDTO){
+    public ResponseEntity<?> register(@RequestBody RegistrationDTO registrationDTO){
         String response = authService.register(registrationDTO);
 
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody AuthLoginDTO authLoginDTO){
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody AuthLoginDTO authLoginDTO){
         AuthResponseDTO authResponseDTO = authService.login(authLoginDTO);
 
         return ResponseEntity.ok(authResponseDTO);

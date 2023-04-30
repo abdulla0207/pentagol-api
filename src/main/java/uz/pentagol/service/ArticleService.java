@@ -6,11 +6,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import uz.pentagol.dto.ArticleDTO;
+import uz.pentagol.dto.JwtDTO;
 import uz.pentagol.entity.ArticleEntity;
+import uz.pentagol.enums.UserRoleEnum;
+import uz.pentagol.exceptions.AppForbiddenException;
 import uz.pentagol.exceptions.ItemNotFound;
 import uz.pentagol.repository.ArticleRepository;
 
-import javax.swing.text.html.Option;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -37,10 +40,13 @@ public class ArticleService {
 
     }
 
-    public String createArticle(ArticleDTO articleDTO){
-        articleRepository.save(toEntity(articleDTO));
+    public ArticleDTO createArticle(ArticleDTO articleDTO, JwtDTO jwtDTO){
+        if (!jwtDTO.getRoleEnum().equals(UserRoleEnum.ADMIN))
+            throw new AppForbiddenException("Method not Allowed");
 
-        return "Article created";
+        ArticleEntity save = articleRepository.save(toEntity(articleDTO));
+        articleDTO.setId(save.getId());
+        return articleDTO;
     }
 
     public ArticleDTO getArticleById(int id){
@@ -54,8 +60,10 @@ public class ArticleService {
         return toDto(entity1);
     }
 
-    public int updateArticle(ArticleDTO articleDTO, int id){
-        int res = articleRepository.updateArticle(articleDTO.getBody(), articleDTO.getDescription(), articleDTO.getTitle(), articleDTO.getImage(), id);
+    public int updateArticle(ArticleDTO articleDTO, int id, JwtDTO jwtDTO){
+        if (!jwtDTO.getRoleEnum().equals(UserRoleEnum.ADMIN))
+            throw new AppForbiddenException("Method not Allowed");
+        int res = articleRepository.updateArticle(articleDTO.getBody(), articleDTO.getDescription(), articleDTO.getTitle(), id);
 
         return res;
     }
@@ -66,7 +74,6 @@ public class ArticleService {
         dto.setDescription(entity.getDescription());
         dto.setTitle(entity.getTitle());
         dto.setBody(entity.getBody());
-        dto.setImage(entity.getImage());
         dto.setPublishedAt(entity.getPublishedAt());
 
         return dto;
@@ -76,9 +83,10 @@ public class ArticleService {
 
         entity.setBody(dto.getBody());
         entity.setTitle(dto.getTitle());
-        entity.setImage(dto.getImage());
-        entity.setPublishedAt(dto.getPublishedAt());
+        entity.setPublishedAt(LocalDateTime.now());
         entity.setDescription(dto.getDescription());
+
+        return entity;
     }
     private List<ArticleDTO> toDtoList(List<ArticleEntity> articleEntities){
         List<ArticleDTO> articleDTOS = new ArrayList<>();
@@ -87,7 +95,6 @@ public class ArticleService {
             ArticleDTO articleDTO = new ArticleDTO();
             articleDTO.setTitle(e.getTitle());
             articleDTO.setBody(e.getBody());
-            articleDTO.setImage(e.getImage());
             articleDTO.setPublishedAt(e.getPublishedAt());
             articleDTO.setDescription(e.getDescription());
 
@@ -97,7 +104,9 @@ public class ArticleService {
         return articleDTOS;
     }
 
-    public boolean deleteArticle(int id) {
+    public boolean deleteArticle(int id, JwtDTO jwtDTO) {
+        if (!jwtDTO.getRoleEnum().equals(UserRoleEnum.ADMIN))
+            throw new AppForbiddenException("Method not Allowed");
         Optional<ArticleEntity> getById = articleRepository.findById(id);
 
         if(getById.isEmpty())

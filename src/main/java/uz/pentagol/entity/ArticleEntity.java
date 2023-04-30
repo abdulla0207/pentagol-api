@@ -23,7 +23,4 @@ public class ArticleEntity {
     private String description;
     @Column(name = "published_at")
     private LocalDateTime publishedAt;
-    @Lob
-    @Column
-    private byte[] image;
 }

@@ -34,7 +34,7 @@ public class AuthService {
         newUser.setPassword(MD5Util.encode(registrationDTO.getPassword()));
         newUser.setUsername(registrationDTO.getUsername());
         newUser.setEmail(registrationDTO.getEmail());
-        newUser.setUserRoleEnum(UserRoleEnum.ADMIN);
+        newUser.setUserRoleEnum(UserRoleEnum.USER);
 
         profileRepository.save(newUser);
         return "User Created";

@@ -21,11 +21,13 @@ public class LeagueService {
     public LeagueService(LeagueRepository leagueRepository){
         this.leagueRepository = leagueRepository;
     }
-    public String createLeague(LeagueDTO leagueDTO, JwtDTO jwtDTO) {
+    public LeagueDTO createLeague(LeagueDTO leagueDTO, JwtDTO jwtDTO) {
         if (!jwtDTO.getRoleEnum().equals(UserRoleEnum.ADMIN))
             throw new AppForbiddenException("Method not Allowed");
 
 
+//        if(leagueDTO.getName().isBlank() || leagueDTO.getName().isEmpty())
+//            throw new
         Optional<LeagueEntity> findByName = leagueRepository.findByName(leagueDTO.getName());
 
         if(findByName.isPresent())
@@ -35,8 +37,11 @@ public class LeagueService {
         entity.setName(leagueDTO.getName());
         //entity.setImage(leagueDTO.getImage());
 
-        leagueRepository.save(entity);
-        return "League saved";
+        LeagueDTO dto = new LeagueDTO();
+        dto.setName(entity.getName());
+        LeagueEntity newent = leagueRepository.save(entity);
+        dto.setId(newent.getId());
+        return dto;
     }
 
     public List<LeagueDTO> getLeagueList(){
@@ -49,19 +54,20 @@ public class LeagueService {
 
             //temp.setImage(leagueEntity.getImage());
             temp.setName(leagueEntity.getName());
+            temp.setId(leagueEntity.getId());
             response.add(temp);
         });
 
         return response;
     }
 
-    public int updateLeague(LeagueDTO leagueDTO, int id) {
+    public int updateLeague(LeagueDTO leagueDTO, int id, JwtDTO jwtDTO) {
         int res = leagueRepository.updateLeague(leagueDTO.getName(), id);
 
         return res;
     }
 
-    public boolean deleteById(int id){
+    public boolean deleteById(int id, JwtDTO jwtDTO){
         Optional<LeagueEntity> leagueById = leagueRepository.findById(id);
 
         if(leagueById.isEmpty())
