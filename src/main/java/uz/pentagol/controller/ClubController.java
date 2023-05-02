@@ -60,8 +60,4 @@ public class ClubController {
         return ResponseEntity.ok(getClubsByLeagueId);
     }
 
-    @PutMapping("/league/change/stat")
-    public ResponseEntity<?> updateStat(){
-        String response = clubService.updateStat();
-    }
 }
