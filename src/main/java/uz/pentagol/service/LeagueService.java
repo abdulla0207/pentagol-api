@@ -5,7 +5,7 @@ import uz.pentagol.dto.JwtDTO;
 import uz.pentagol.dto.LeagueDTO;
 import uz.pentagol.entity.LeagueEntity;
 import uz.pentagol.enums.UserRoleEnum;
-import uz.pentagol.exceptions.AppBadRequest;
+import uz.pentagol.exceptions.AppBadRequestException;
 import uz.pentagol.exceptions.AppForbiddenException;
 import uz.pentagol.repository.LeagueRepository;
 
@@ -31,7 +31,7 @@ public class LeagueService {
         Optional<LeagueEntity> findByName = leagueRepository.findByName(leagueDTO.getName());
 
         if(findByName.isPresent())
-            throw new AppBadRequest("This league already exists");
+            throw new AppBadRequestException("This league already exists");
 
         LeagueEntity entity = new LeagueEntity();
         entity.setName(leagueDTO.getName());

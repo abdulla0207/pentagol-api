@@ -6,7 +6,7 @@ import uz.pentagol.entity.ClubEntity;
 import uz.pentagol.entity.LeagueEntity;
 import uz.pentagol.entity.MatchEntity;
 import uz.pentagol.enums.UserRoleEnum;
-import uz.pentagol.exceptions.AppBadRequest;
+import uz.pentagol.exceptions.AppBadRequestException;
 import uz.pentagol.exceptions.AppForbiddenException;
 import uz.pentagol.mapper.MatchResultMapper;
 import uz.pentagol.repository.ClubRepository;
@@ -69,7 +69,7 @@ public class ClubService {
         Optional<ClubEntity> findByName = clubRepository.findByName(clubDTO.getName());
 
         if(findByName.isPresent())
-            throw new AppBadRequest("This club already exists");
+            throw new AppBadRequestException("This club already exists");
 
         ClubEntity save = clubRepository.save(toEntity(clubDTO));
         clubDTO.setId(save.getId());

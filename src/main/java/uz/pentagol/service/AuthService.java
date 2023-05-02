@@ -6,7 +6,7 @@ import uz.pentagol.dto.authorization.AuthLoginDTO;
 import uz.pentagol.dto.authorization.AuthResponseDTO;
 import uz.pentagol.entity.UserEntity;
 import uz.pentagol.enums.UserRoleEnum;
-import uz.pentagol.exceptions.AppBadRequest;
+import uz.pentagol.exceptions.AppBadRequestException;
 import uz.pentagol.exceptions.ItemAlreadyExists;
 import uz.pentagol.repository.ProfileRepository;
 import uz.pentagol.util.JwtUtil;
@@ -45,7 +45,7 @@ public class AuthService {
                 MD5Util.encode(authLoginDTO.getPassword()));
 
         if(userByEmailAndPassword.isEmpty())
-            throw new AppBadRequest("User not found. Credentials are wrong");
+            throw new AppBadRequestException("User not found. Credentials are wrong");
 
         AuthResponseDTO responseDTO = toResponseDTO(userByEmailAndPassword.get());
         return responseDTO;

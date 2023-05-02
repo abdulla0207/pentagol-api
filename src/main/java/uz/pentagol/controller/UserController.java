@@ -3,7 +3,7 @@ package uz.pentagol.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.pentagol.dto.JwtDTO;
-import uz.pentagol.exceptions.AppBadRequest;
+import uz.pentagol.exceptions.AppBadRequestException;
 import uz.pentagol.service.UserService;
 import uz.pentagol.util.JwtUtil;
 
@@ -23,7 +23,7 @@ public class UserController {
         JwtDTO jwtDTO = JwtUtil.decode(JwtUtil.getToken(headerToken));
 
         if(jwtDTO==null)
-            throw new AppBadRequest("Wrong token");
+            throw new AppBadRequestException("Wrong token");
         return ResponseEntity.ok(jwtDTO);
     }
 }

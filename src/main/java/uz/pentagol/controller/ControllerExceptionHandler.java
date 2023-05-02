@@ -8,7 +8,7 @@ import uz.pentagol.exceptions.*;
 
 @ControllerAdvice
 public class ControllerExceptionHandler {
-    @ExceptionHandler(value = {AppBadRequest.class,
+    @ExceptionHandler(value = {AppBadRequestException.class,
             ItemNotFound.class,
             ItemNotFound.class,
             UserNotFound.class,
