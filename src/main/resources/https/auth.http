@@ -12,7 +12,7 @@ POST localhost:8080/auth/login
 Content-Type: application/json
 
 {
-    "username": "cricketUserasd",
+    "username": "cricketUser",
     "password": "qwerty123456"
 }
 

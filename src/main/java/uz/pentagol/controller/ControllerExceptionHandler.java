@@ -12,7 +12,8 @@ public class ControllerExceptionHandler {
             ItemNotFound.class,
             ItemNotFound.class,
             UserNotFound.class,
-            ItemAlreadyExists.class})
+            ItemAlreadyExists.class,
+            MatchDateException.class})
     public ResponseEntity<?> handleException(RuntimeException e) {
         return ResponseEntity.badRequest().body(e.getMessage());
     }

@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import uz.pentagol.entity.MatchEntity;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface MatchRepository extends JpaRepository<MatchEntity, Integer> {
 
@@ -23,4 +24,7 @@ public interface MatchRepository extends JpaRepository<MatchEntity, Integer> {
 
     @Query("select m from MatchEntity as m where m.matchDate < ?1")
     List<MatchEntity> getPrevMatches(LocalDateTime currentDate);
+
+    @Query("select m from MatchEntity as m where date(m.matchDate) = ?1 and ((m.clubAId = ?2 and m.clubBId = ?3) or (m.clubAId = ?2 or m.clubBId=?3))")
+    Optional<MatchEntity> findByMatchDate(LocalDateTime matchDate, int clubAId, int clubBId);
 }

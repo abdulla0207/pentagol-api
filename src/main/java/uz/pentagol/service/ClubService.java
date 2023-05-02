@@ -23,12 +23,9 @@ public class ClubService {
 
     private final MatchService matchService;
 
-    private final LeagueService leagueService;
-
-    public ClubService(ClubRepository clubRepository, MatchService matchService, LeagueService leagueService){
+    public ClubService(ClubRepository clubRepository, MatchService matchService){
         this.clubRepository = clubRepository;
         this.matchService = matchService;
-        this.leagueService = leagueService;
     }
     public List<ClubDTO> getClubs() {
         List<ClubEntity> clubEntityPage = clubRepository.findAll();
@@ -46,7 +43,6 @@ public class ClubService {
             clubDTO.setName(entity.getName());
             clubDTO.setPoint(entity.getPoint());
             clubDTO.setGamesPlayed(entity.getGamesPlayed());
-            clubDTO.setImage(entity.getImage());
             clubDTO.setLeague(toLeagueDto(entity.getLeague()));
 
             clubDTOS.add(clubDTO);
@@ -88,7 +84,6 @@ public class ClubService {
         clubEntity.setGamesPlayed(clubDTO.getGamesPlayed());
         clubEntity.setName(clubDTO.getName());
         clubEntity.setPoint(clubDTO.getPoint());
-        clubEntity.setImage(clubDTO.getImage());
         clubEntity.setLeagueId(clubDTO.getLeagueId());
         return clubEntity;
     }
@@ -96,7 +91,7 @@ public class ClubService {
     public int updateClub(ClubDTO clubDTO, int id, JwtDTO jwtDTO) {
         if (!jwtDTO.getRoleEnum().equals(UserRoleEnum.ADMIN))
             throw new AppForbiddenException("Method not Allowed");
-        int result = clubRepository.updateClub(clubDTO.getName(), clubDTO.getPoint(), clubDTO.getLeagueId(), clubDTO.getImage(),
+        int result = clubRepository.updateClub(clubDTO.getName(), clubDTO.getPoint(), clubDTO.getLeagueId(),
                 clubDTO.getGamesPlayed(), id);
 
         return result;
@@ -123,7 +118,6 @@ public class ClubService {
             System.out.println(clubEntity.getLeagueId());
             ClubDTO clubDTO = new ClubDTO();
             clubDTO.setName(clubEntity.getName());
-            clubDTO.setImage(clubEntity.getImage());
             clubDTO.setGamesPlayed(clubEntity.getGamesPlayed());
             clubDTO.setPoint(clubEntity.getPoint());
             clubDTO.setLeagueId(clubEntity.getLeagueId());

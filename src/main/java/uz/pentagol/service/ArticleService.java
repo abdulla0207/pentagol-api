@@ -7,6 +7,7 @@ import uz.pentagol.dto.JwtDTO;
 import uz.pentagol.entity.ArticleEntity;
 import uz.pentagol.enums.UserRoleEnum;
 import uz.pentagol.exceptions.AppForbiddenException;
+import uz.pentagol.exceptions.ArticleCreateException;
 import uz.pentagol.exceptions.ItemNotFound;
 import uz.pentagol.repository.ArticleRepository;
 
@@ -40,6 +41,13 @@ public class ArticleService {
     public ArticleDTO createArticle(ArticleDTO articleDTO, JwtDTO jwtDTO){
         if (!jwtDTO.getRoleEnum().equals(UserRoleEnum.ADMIN))
             throw new AppForbiddenException("Method not Allowed");
+
+        if(articleDTO.getTitle().trim().isBlank())
+            throw new ArticleCreateException("Title of the article should be filled");
+        if(articleDTO.getBody().isBlank())
+            throw new ArticleCreateException("Body of the article should be filled");
+        if(articleDTO.getDescription().isBlank())
+            throw new ArticleCreateException("The article should have description");
 
         ArticleEntity save = articleRepository.save(toEntity(articleDTO));
         articleDTO.setId(save.getId());

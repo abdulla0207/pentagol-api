@@ -1,18 +1,19 @@
 package uz.pentagol.service;
 
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import uz.pentagol.dto.JwtDTO;
 import uz.pentagol.dto.MatchDTO;
 import uz.pentagol.entity.MatchEntity;
 import uz.pentagol.enums.UserRoleEnum;
 import uz.pentagol.exceptions.AppForbiddenException;
-import uz.pentagol.mapper.MatchMapper;
+import uz.pentagol.exceptions.MatchDateException;
 import uz.pentagol.repository.MatchRepository;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.time.temporal.WeekFields;
 import java.util.List;
@@ -71,6 +72,18 @@ public class MatchService {
     public MatchDTO create(MatchDTO matchDTO, JwtDTO jwtDTO) {
         if (!jwtDTO.getRoleEnum().equals(UserRoleEnum.ADMIN))
             throw new AppForbiddenException("Method not Allowed");
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime matchDateDTO = LocalDateTime.parse(matchDTO.getMatchDate(), formatter);
+
+        String splitToDate = matchDTO.getMatchDate().split(" ")[0];
+
+        Optional<MatchEntity> getByMatchDate = matchRepository.findByMatchDate(matchDateDTO, matchDTO.getClubAId(), matchDTO.getClubBId());
+
+        if(getByMatchDate.isPresent() &&
+                getByMatchDate.get().getMatchDate().format(DateTimeFormatter.ISO_LOCAL_DATE).equals(splitToDate))
+            throw new MatchDateException("Wrong match date for these clubs");
+
         MatchEntity save = matchRepository.save(toEntity(matchDTO));
 
         matchDTO.setId(save.getId());
@@ -85,8 +98,9 @@ public class MatchService {
         entity.setLeagueId(matchDTO.getLeagueId());
         entity.setClubAScore(matchDTO.getClubAScore());
         entity.setClubBScore(matchDTO.getClubBScore());
-        LocalDateTime time = LocalDateTime.parse(matchDTO.getMatchDate());
-        entity.setMatchDate(time);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime matchDateDTO = LocalDateTime.parse(matchDTO.getMatchDate(), formatter);
+        entity.setMatchDate(matchDateDTO);
 
         return entity;
     }

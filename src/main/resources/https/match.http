@@ -1,0 +1,12 @@
+POST localhost:8080/match/create
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2ODMwNTMwNzIsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJ1c2VybmFtZSI6ImNyaWNrZXRVc2VyIiwiZXhwIjoxNjgzMTM5NDcyLCJpc3MiOiJwZW50YUdvbCJ9.pS3Tu-rcA7-Apu8VsqdbACuORLneV8llQ0VP6ZLxW00
+Content-Type: application/json
+
+{
+  "clubAId": 3,
+  "clubBId": 4,
+  "clubAScore": 3,
+  "clubBScore": 0,
+  "leagueId": 1,
+  "matchDate": "2023-05-28 15:13:23"
+}

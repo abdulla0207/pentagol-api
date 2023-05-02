@@ -7,6 +7,7 @@ import uz.pentagol.entity.LeagueEntity;
 import uz.pentagol.enums.UserRoleEnum;
 import uz.pentagol.exceptions.AppBadRequestException;
 import uz.pentagol.exceptions.AppForbiddenException;
+import uz.pentagol.exceptions.LeagueCreateException;
 import uz.pentagol.repository.LeagueRepository;
 
 import java.util.ArrayList;
@@ -26,8 +27,9 @@ public class LeagueService {
             throw new AppForbiddenException("Method not Allowed");
 
 
-//        if(leagueDTO.getName().isBlank() || leagueDTO.getName().isEmpty())
-//            throw new
+        if(leagueDTO.getName().isBlank() || leagueDTO.getName().isEmpty())
+            throw new LeagueCreateException("Name of the league cannot be empty");
+
         Optional<LeagueEntity> findByName = leagueRepository.findByName(leagueDTO.getName());
 
         if(findByName.isPresent())
@@ -35,7 +37,6 @@ public class LeagueService {
 
         LeagueEntity entity = new LeagueEntity();
         entity.setName(leagueDTO.getName());
-        //entity.setImage(leagueDTO.getImage());
 
         LeagueDTO dto = new LeagueDTO();
         dto.setName(entity.getName());

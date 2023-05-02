@@ -17,8 +17,8 @@ public interface ClubRepository extends JpaRepository<ClubEntity, Integer> {
 
     @Modifying
     @Transactional
-    @Query("update ClubEntity as c set c.name=?1, c.point=?2, c.leagueId=?3, c.image=?4, c.gamesPlayed=?5 where c.id = ?6")
-    int updateClub(String name, int point, int leagueId, byte[] image, int gamesPlayed, int id);
+    @Query("update ClubEntity as c set c.name=?1, c.point=?2, c.leagueId=?3, c.gamesPlayed=?4 where c.id = ?5")
+    int updateClub(String name, int point, int leagueId, int gamesPlayed, int id);
 
 
     @Query("select c from ClubEntity as c where c.leagueId=?1 order by c.gamesPlayed desc, c.point desc")

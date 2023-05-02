@@ -12,7 +12,6 @@ public class ClubDTO {
     private String name;
     private int point;
     private int gamesPlayed;
-    private byte[] image;
     private int leagueId;
     private LeagueDTO league;
 }
