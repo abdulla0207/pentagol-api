@@ -1,7 +1,9 @@
 package uz.pentagol.service;
 
 import org.springframework.stereotype.Service;
-import uz.pentagol.dto.RegistrationDTO;
+import uz.pentagol.dto.authentication.RegistrationDTO;
+import uz.pentagol.dto.authentication.RegistrationResponseDTO;
+import uz.pentagol.dto.authentication.UserRegistrationResponseDTO;
 import uz.pentagol.dto.authorization.AuthLoginDTO;
 import uz.pentagol.dto.authorization.AuthResponseDTO;
 import uz.pentagol.entity.UserEntity;
@@ -21,7 +23,7 @@ public class AuthService {
     public AuthService(ProfileRepository profileRepository){
         this.profileRepository = profileRepository;
     }
-    public String register(RegistrationDTO registrationDTO) {
+    public RegistrationResponseDTO register(RegistrationDTO registrationDTO) {
         Optional<UserEntity> userByEmail = profileRepository.findByEmail(registrationDTO.getEmail());
         Optional<UserEntity> userByUsername = profileRepository.findByUsername(registrationDTO.getUsername());
 
@@ -37,7 +39,16 @@ public class AuthService {
         newUser.setUserRoleEnum(UserRoleEnum.USER);
 
         profileRepository.save(newUser);
-        return "User Created";
+
+        RegistrationResponseDTO responseDTO = toRegistrationResponseDTO(newUser);
+        return responseDTO;
+    }
+
+    private RegistrationResponseDTO toRegistrationResponseDTO(UserEntity newUser) {
+        RegistrationResponseDTO dto = new RegistrationResponseDTO();
+        dto.setToken(JwtUtil.encode(newUser.getId(), newUser.getUsername(), newUser.getUserRoleEnum()));
+        dto.setUserResponse(new UserRegistrationResponseDTO(newUser.getId(), newUser.getUsername(), newUser.getEmail()));
+        return dto;
     }
 
     public AuthResponseDTO login(AuthLoginDTO authLoginDTO) {

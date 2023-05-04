@@ -18,9 +18,6 @@ public class ClubEntity {
     private int point;
     @Column(name = "games_played")
     private int gamesPlayed;
-    @Column
-    @Lob
-    private byte[] image;
     @Column(name = "league_id")
     private int leagueId;
     @ManyToOne

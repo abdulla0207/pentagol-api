@@ -10,11 +10,11 @@ import java.util.Optional;
 
 public interface LeagueRepository extends JpaRepository<LeagueEntity, Integer> {
 
-    @Query("select l from LeagueEntity as l where l.name=?1")
+    @Query("select l from LeagueEntity as l where l.nameEn=?1")
     Optional<LeagueEntity> findByName(String name);
 
     @Modifying
     @Transactional
-    @Query("update LeagueEntity as l set l.name = ?1 where l.id = ?2")
+    @Query("update LeagueEntity as l set l.nameEn = ?1 where l.id = ?2")
     int updateLeague(String name, int id);
 }

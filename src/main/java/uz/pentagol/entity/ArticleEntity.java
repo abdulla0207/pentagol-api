@@ -15,12 +15,18 @@ public class ArticleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column
-    private String title;
-    @Column
-    private String body;
-    @Column
-    private String description;
+    @Column(name = "title_en")
+    private String titleEn;
+    @Column(name = "title_uz")
+    private String titleUz;
+    @Column(name = "body_en")
+    private String bodyEn;
+    @Column(name = "body_uz")
+    private String bodyUz;
+    @Column(name = "descriptionEn")
+    private String descriptionEn;
+    @Column(name = "descriptionUz")
+    private String descriptionUz;
     @Column(name = "published_at")
     private LocalDateTime publishedAt;
 }

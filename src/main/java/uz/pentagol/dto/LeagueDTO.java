@@ -10,6 +10,4 @@ import lombok.Setter;
 public class LeagueDTO {
     private int id;
     private String name;
-    //@NotBlank(message = "Image of league is required")
-    //private byte[] image;
 }

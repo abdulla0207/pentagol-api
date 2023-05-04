@@ -1,4 +1,4 @@
-package uz.pentagol.dto;
+package uz.pentagol.dto.authentication;
 
 import lombok.Getter;
 import lombok.Setter;

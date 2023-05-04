@@ -2,7 +2,8 @@ package uz.pentagol.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import uz.pentagol.dto.RegistrationDTO;
+import uz.pentagol.dto.authentication.RegistrationDTO;
+import uz.pentagol.dto.authentication.RegistrationResponseDTO;
 import uz.pentagol.dto.authorization.AuthLoginDTO;
 import uz.pentagol.dto.authorization.AuthResponseDTO;
 import uz.pentagol.service.AuthService;
@@ -20,7 +21,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegistrationDTO registrationDTO){
-        String response = authService.register(registrationDTO);
+        RegistrationResponseDTO response = authService.register(registrationDTO);
 
         return ResponseEntity.ok(response);
     }

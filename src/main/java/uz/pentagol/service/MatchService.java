@@ -10,7 +10,6 @@ import uz.pentagol.exceptions.MatchDateException;
 import uz.pentagol.repository.MatchRepository;
 
 import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;

@@ -76,9 +76,9 @@ public class ArticleService {
     private ArticleDTO toDto(ArticleEntity entity){
         ArticleDTO dto = new ArticleDTO();
 
-        dto.setDescription(entity.getDescription());
-        dto.setTitle(entity.getTitle());
-        dto.setBody(entity.getBody());
+        dto.setDescription(entity.getDescriptionEn());
+        dto.setTitle(entity.getTitleEn());
+        dto.setBody(entity.getBodyEn());
         dto.setPublishedAt(entity.getPublishedAt().toString());
 
         return dto;
@@ -86,10 +86,10 @@ public class ArticleService {
     private ArticleEntity toEntity(ArticleDTO dto){
         ArticleEntity entity = new ArticleEntity();
 
-        entity.setBody(dto.getBody());
-        entity.setTitle(dto.getTitle());
+        entity.setBodyEn(dto.getBody());
+        entity.setTitleEn(dto.getTitle());
         entity.setPublishedAt(LocalDateTime.now());
-        entity.setDescription(dto.getDescription());
+        entity.setDescriptionEn(dto.getDescription());
 
         return entity;
     }
@@ -98,10 +98,10 @@ public class ArticleService {
 
         articleEntities.forEach(e ->{
             ArticleDTO articleDTO = new ArticleDTO();
-            articleDTO.setTitle(e.getTitle());
-            articleDTO.setBody(e.getBody());
+            articleDTO.setTitle(e.getTitleEn());
+            articleDTO.setBody(e.getBodyEn());
             articleDTO.setPublishedAt(e.getPublishedAt().toString());
-            articleDTO.setDescription(e.getDescription());
+            articleDTO.setDescription(e.getDescriptionEn());
             articleDTO.setId(e.getId());
             articleDTOS.add(articleDTO);
         });

@@ -10,7 +10,7 @@ public interface ArticleRepository extends JpaRepository<ArticleEntity, Integer>
 
     @Modifying
     @Transactional
-    @Query("update ArticleEntity as a set a.body=?1, a.description=?2, a.title=?3 where a.id = ?4")
+    @Query("update ArticleEntity as a set a.bodyEn=?1, a.descriptionEn=?2, a.titleEn=?3 where a.id = ?4")
     int updateArticle(String body, String description, String title, int id);
 
 }

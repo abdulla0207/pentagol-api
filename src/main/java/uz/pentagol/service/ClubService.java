@@ -53,7 +53,7 @@ public class ClubService {
 
     private LeagueDTO toLeagueDto(LeagueEntity entity){
         LeagueDTO leagueDTO = new LeagueDTO();
-        leagueDTO.setName(entity.getName());
+        leagueDTO.setName(entity.getNameEn());
         leagueDTO.setId(entity.getId());
         return leagueDTO;
     }
@@ -71,7 +71,7 @@ public class ClubService {
         clubDTO.setId(save.getId());
         clubDTO.setLeagueId(save.getLeagueId());
         LeagueDTO dto = new LeagueDTO();
-        dto.setName(save.getLeague().getName());
+        dto.setName(save.getLeague().getNameEn());
         dto.setId(save.getLeague().getId());
         clubDTO.setLeague(dto);
         return clubDTO;

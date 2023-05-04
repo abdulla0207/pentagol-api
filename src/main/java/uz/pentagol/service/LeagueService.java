@@ -36,10 +36,10 @@ public class LeagueService {
             throw new AppBadRequestException("This league already exists");
 
         LeagueEntity entity = new LeagueEntity();
-        entity.setName(leagueDTO.getName());
+        entity.setNameEn(leagueDTO.getName());
 
         LeagueDTO dto = new LeagueDTO();
-        dto.setName(entity.getName());
+        dto.setName(entity.getNameEn());
         LeagueEntity newent = leagueRepository.save(entity);
         dto.setId(newent.getId());
         return dto;
@@ -53,8 +53,7 @@ public class LeagueService {
         entities.forEach(leagueEntity -> {
             LeagueDTO temp = new LeagueDTO();
 
-            //temp.setImage(leagueEntity.getImage());
-            temp.setName(leagueEntity.getName());
+            temp.setName(leagueEntity.getNameEn());
             temp.setId(leagueEntity.getId());
             response.add(temp);
         });
