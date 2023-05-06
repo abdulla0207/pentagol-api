@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import uz.pentagol.enums.UserRoleEnum;
+import uz.pentagol.enums.UserStatusEnum;
 
 @Entity
 @Table(name = "users")
@@ -22,4 +23,7 @@ public class UserEntity {
     @Column(name = "user_role")
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum userRoleEnum;
+    @Column(name = "user_status")
+    @Enumerated(value = EnumType.STRING)
+    private UserStatusEnum userStatusEnum;
 }

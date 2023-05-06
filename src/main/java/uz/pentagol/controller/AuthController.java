@@ -32,4 +32,11 @@ public class AuthController {
 
         return ResponseEntity.ok(authResponseDTO);
     }
+
+    @GetMapping("/verify/email/{jwtToken}")
+    public ResponseEntity<?> emailVerification(@PathVariable("jwtToken") String token){
+        String response = authService.verifyEmail(token);
+
+        return ResponseEntity.ok(response);
+    }
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 import uz.pentagol.enums.UserRoleEnum;
+import uz.pentagol.enums.UserStatusEnum;
 
 @Getter
 @Setter
@@ -14,4 +15,5 @@ public class UserDTO {
     private String password;
     private String email;
     private UserRoleEnum roleEnum;
+    private UserStatusEnum userStatusEnum;
 }
